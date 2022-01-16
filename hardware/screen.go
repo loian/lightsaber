@@ -21,11 +21,10 @@ func (s *Screen) Sample(screenshot image.Image, samples []image.Rectangle) []col
 		dominantColors := color_extractor.ExtractColors(element)
 		dominantColor := dominantColors[0]
 		r, g, b, _ := dominantColors[0].RGBA()
-		if r < 50 && g < 50 && b < 50 {
-			if len(dominantColors) > 1 {
-				dominantColor = dominantColors[1]
-			}
+		if r == 0 && g == 0 && b == 0 {
+			dominantColor = color.RGBA{5, 5, 5, 155}
 		}
+
 		colors = append(colors, dominantColor)
 	}
 

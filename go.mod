@@ -7,6 +7,7 @@ require (
 	github.com/marekm4/color-extractor v1.2.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/tarm/serial v0.0.0-20180830185346-98f6abe2eb07
+	github.com/teacat/noire v1.1.0
 )
 
 require (
