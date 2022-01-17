@@ -2,20 +2,14 @@ package hardware
 
 import (
 	"image"
+	"lightsaber/config"
 )
 
-type Margins struct {
-	Right  int
-	Top    int
-	Left   int
-	Bottom int
-}
 type SamplesGeometry struct {
 	viewPort    image.Rectangle
-	ledGeometry LedGeometry
-	margins     Margins
-	width       int
-	heigh       int
+	ledGeometry config.LedGeometry
+	margins     config.Margins
+	size        config.Size
 }
 
 func (s SamplesGeometry) Calculate() []image.Rectangle {
@@ -28,7 +22,7 @@ func (s SamplesGeometry) Calculate() []image.Rectangle {
 	for y := yResolution; y >= rightHeight; y = y - rightHeight {
 		rectangle := image.Rectangle{
 			image.Point{
-				xResolution - s.width - s.margins.Right,
+				xResolution - s.size.Width - s.margins.Right,
 				y - rightHeight,
 			},
 			image.Point{
@@ -50,7 +44,7 @@ func (s SamplesGeometry) Calculate() []image.Rectangle {
 			},
 			image.Point{
 				x,
-				s.heigh + s.margins.Top,
+				s.size.Height + s.margins.Top,
 			},
 		}
 		samples = append(samples, rectangle)
@@ -64,7 +58,7 @@ func (s SamplesGeometry) Calculate() []image.Rectangle {
 				y,
 			},
 			image.Point{
-				s.width + s.margins.Left,
+				s.size.Width + s.margins.Left,
 				y + leftHeight,
 			},
 		}
@@ -78,7 +72,7 @@ func (s SamplesGeometry) Calculate() []image.Rectangle {
 		rectangle := image.Rectangle{
 			image.Point{
 				x,
-				yResolution - s.heigh - s.margins.Bottom,
+				yResolution - s.size.Height - s.margins.Bottom,
 			},
 			image.Point{
 				x + bottomWidth,
@@ -92,12 +86,11 @@ func (s SamplesGeometry) Calculate() []image.Rectangle {
 	return samples
 }
 
-func NewSamplesGeometry(viewPort image.Rectangle, ledGeometry LedGeometry, margins Margins, width int, heigh int) SamplesGeometry {
+func NewSamplesGeometry(viewPort image.Rectangle, ledGeometry config.LedGeometry, grabber config.ScreenGrabber) SamplesGeometry {
 	return SamplesGeometry{
 		viewPort,
 		ledGeometry,
-		margins,
-		width,
-		heigh,
+		grabber.Margin,
+		grabber.Size,
 	}
 }

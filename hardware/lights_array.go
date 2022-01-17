@@ -1,5 +1,7 @@
 package hardware
 
+import "lightsaber/config"
+
 const (
 	HEADER_COUNT = 6
 	R_OFFSET     = 0
@@ -32,13 +34,13 @@ func (la *LightsArray) Buffer() []byte {
 	return la.buffer
 }
 
-func NewArray(offset int, geometry LedGeometry) *LightsArray {
+func NewArray(geometry config.LedGeometry) *LightsArray {
 
 	total := geometry.Right + geometry.Top + geometry.Left + geometry.Bottom
 	positions := make([]int, total)
 
 	for i := 0; i < int(total); i++ {
-		currentLed := i - offset
+		currentLed := i - geometry.Offset
 		if currentLed > total {
 			currentLed = currentLed - total
 		}
