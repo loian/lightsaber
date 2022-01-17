@@ -23,6 +23,7 @@ func (sg *ScreenGrabber) Render(port *serial.Port) {
 	img, _ := screenshot.CaptureDisplay(sg.displayIndex)
 	colors := screen.DominantColors(img, sampleAreas)
 	for pos, c := range colors {
+		//TODO: move the color adjustment in a separate class or decorate the lights struct
 		r, g, b := util.ToRGB256(c)
 		r, g, b = util.Darken(r, g, b, sg.colorAdjustment.DarkenPercentage)
 		sg.lights.SetLed(pos, r, g, b)
