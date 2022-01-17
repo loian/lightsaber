@@ -65,5 +65,8 @@ func main() {
 		samplesGeometry,
 		lights)
 
-	screenGrabber.Render(serialPort)
+	renderTermination := make(chan bool)
+	go screenGrabber.Render(serialPort, renderTermination)
+
+	select {}
 }

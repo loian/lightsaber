@@ -1,6 +1,7 @@
 package mode
 
 import (
+	"fmt"
 	"github.com/kbinani/screenshot"
 	"github.com/sirupsen/logrus"
 	"github.com/tarm/serial"
@@ -16,13 +17,22 @@ type ScreenGrabber struct {
 	lights          *hardware.LightsArray
 }
 
-func (sg *ScreenGrabber) Render(port *serial.Port) {
+func (sg *ScreenGrabber) Render(port *serial.Port, signal chan bool) {
 
 	sampleAreas := sg.samplesGeometry.Calculate()
 	screen := hardware.Screen{}
-	for {
+	terminate := false
+	for terminate != true {
+
+		select {
+		case <-signal:
+			terminate = true
+			fmt.Println("sig")
+		default:
+		}
+
 		img, _ := screenshot.CaptureDisplay(sg.displayIndex)
-		colors := screen.Sample(img, sampleAreas)
+		colors := screen.DominantColors(img, sampleAreas)
 		for pos, c := range colors {
 			r, g, b := util.ToRGB256(c)
 			r, g, b = util.Darken(r, g, b, sg.colorAdjustment.DarkenPercentage)

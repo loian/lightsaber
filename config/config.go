@@ -35,9 +35,10 @@ type ScreenGrabber struct {
 }
 
 type Configuration struct {
-	DisplayIndex    int    `json:"display_index"`
-	Serial          Serial `json:"serial"`
-	ColorAdjustment ColorAdjustment
-	LedGeometry     LedGeometry   `json:"led_geometry"`
-	ScreenGrabber   ScreenGrabber `json:"screen_grabber"`
+	DisplayIndex    int             `json:"display_index"`
+	SelectedMode    string          `json:"selected_mode"`
+	Serial          Serial          `json:"serial"`
+	ColorAdjustment ColorAdjustment `json:"color_adjustment"`
+	LedGeometry     LedGeometry     `json:"led_geometry"`
+	ScreenGrabber   ScreenGrabber   `json:"screen_grabber"`
 }

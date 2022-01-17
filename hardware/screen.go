@@ -9,7 +9,7 @@ import (
 type Screen struct {
 }
 
-func (s *Screen) Sample(screenshot image.Image, samples []image.Rectangle) []color.Color {
+func (s *Screen) DominantColors(screenshot image.Image, samples []image.Rectangle) []color.Color {
 
 	var colors []color.Color
 
