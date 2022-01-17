@@ -7,6 +7,7 @@ import (
 	"lightsaber/config"
 	"lightsaber/hardware"
 	"lightsaber/mode"
+	"time"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 	conf := config.Configuration{
 		DisplayIndex: 0,
 		Serial: config.Serial{
-			Port: "/dev/tty.usbserial-14310",
+			Port: "/dev/tty.usbserial-110",
 			Baud: 115200,
 		},
 		ColorAdjustment: config.ColorAdjustment{
@@ -37,8 +38,8 @@ func main() {
 				Bottom: 100,
 			},
 			Size: config.Size{
-				Width:  250,
-				Height: 250,
+				Width:  450,
+				Height: 400,
 			},
 		},
 	}
@@ -65,8 +66,16 @@ func main() {
 		samplesGeometry,
 		lights)
 
-	renderTermination := make(chan bool)
-	go screenGrabber.Render(serialPort, renderTermination)
+	ticker := time.NewTicker(80 * time.Millisecond)
+
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				screenGrabber.Render(serialPort)
+			}
+		}
+	}()
 
 	select {}
 }
