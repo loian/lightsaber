@@ -66,7 +66,7 @@ func main() {
 		samplesGeometry,
 		lights)
 
-	ticker := time.NewTicker(80 * time.Millisecond)
+	ticker := time.NewTicker(60 * time.Millisecond)
 
 	go func() {
 		for {
