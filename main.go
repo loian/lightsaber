@@ -17,11 +17,11 @@ func main() {
 	conf := config.Configuration{
 		DisplayIndex: 0,
 		Serial: config.Serial{
-			Port: "/dev/tty.usbserial-14310",
+			Port: "/dev/tty.usbserial-110",
 			Baud: 115200,
 		},
 		ColorAdjustment: config.ColorAdjustment{
-			DarkenPercentage: 0.2,
+			DarkenPercentage: 0.0,
 		},
 		LedGeometry: config.LedGeometry{
 			Offset: 0,
@@ -63,7 +63,7 @@ func main() {
 	screenGrabber := mode.NewScreenGrabber(
 		conf.DisplayIndex,
 		conf.ColorAdjustment,
-		samplesGeometry,
+		samplesGeometry.Calculate(),
 		lights)
 
 	ticker := time.NewTicker(60 * time.Millisecond)

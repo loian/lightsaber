@@ -4,6 +4,7 @@ import (
 	"github.com/kbinani/screenshot"
 	"github.com/sirupsen/logrus"
 	"github.com/tarm/serial"
+	"image"
 	"lightsaber/config"
 	"lightsaber/hardware"
 	"lightsaber/util"
@@ -12,16 +13,15 @@ import (
 type ScreenGrabber struct {
 	displayIndex    int
 	colorAdjustment config.ColorAdjustment
-	samplesGeometry hardware.SamplesGeometry
+	sampleAreas     []image.Rectangle
 	lights          *hardware.LightsArray
 }
 
 func (sg *ScreenGrabber) Render(port *serial.Port) {
 
-	sampleAreas := sg.samplesGeometry.Calculate()
 	screen := hardware.Screen{}
 	img, _ := screenshot.CaptureDisplay(sg.displayIndex)
-	colors := screen.DominantColors(img, sampleAreas)
+	colors := screen.DominantColors(img, sg.sampleAreas)
 	for pos, c := range colors {
 		//TODO: move the color adjustment in a separate class or decorate the lights struct
 		r, g, b := util.ToRGB256(c)
@@ -38,12 +38,12 @@ func (sg *ScreenGrabber) Render(port *serial.Port) {
 func NewScreenGrabber(
 	displayIndex int,
 	colorAdjustment config.ColorAdjustment,
-	samplesGeometry hardware.SamplesGeometry,
+	sampleAreas []image.Rectangle,
 	lights *hardware.LightsArray) *ScreenGrabber {
 	return &ScreenGrabber{
 		displayIndex:    displayIndex,
 		colorAdjustment: colorAdjustment,
-		samplesGeometry: samplesGeometry,
+		sampleAreas:     sampleAreas,
 		lights:          lights,
 	}
 }
