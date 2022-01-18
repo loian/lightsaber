@@ -1,7 +1,6 @@
 package hardware
 
 import (
-	color_extractor "github.com/marekm4/color-extractor"
 	"image"
 	"image/color"
 )
@@ -14,13 +13,10 @@ func (s *Screen) DominantColors(screenshot image.Image, samples []image.Rectangl
 	var colors []color.Color
 
 	for _, rect := range samples {
-		element := screenshot.(interface {
-			SubImage(r image.Rectangle) image.Image
-		}).SubImage(rect)
 
-		dominantColors := color_extractor.ExtractColorsWithConfig(element, color_extractor.Config{
+		dominantColors := ExtractColorsWithConfig(screenshot, rect, Config{
 			DownSizeTo:  25.,
-			SmallBucket: .01,
+			SmallBucket: .1,
 		})
 
 		if len(dominantColors) == 0 {

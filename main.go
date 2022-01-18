@@ -17,7 +17,7 @@ func main() {
 	conf := config.Configuration{
 		DisplayIndex: 0,
 		Serial: config.Serial{
-			Port: "/dev/tty.usbserial-110",
+			Port: "/dev/tty.usbserial-14310",
 			Baud: 115200,
 		},
 		ColorAdjustment: config.ColorAdjustment{
