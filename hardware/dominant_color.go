@@ -21,30 +21,25 @@ func (c ByCount) Swap(i, j int)      { c[i], c[j] = c[j], c[i] }
 func (c ByCount) Less(i, j int) bool { return c[i].Count < c[j].Count }
 
 type Config struct {
-	DownSizeTo  float64
+	StepX       int
+	StepY       int
 	SmallBucket float64
 }
 
 func ExtractColors(image image.Image, sampleArea image.Rectangle) []color.Color {
 	return ExtractColorsWithConfig(image, sampleArea, Config{
-		DownSizeTo:  224.,
+		StepX:       10,
+		StepY:       10,
 		SmallBucket: .01,
 	})
 }
 
 func ExtractColorsWithConfig(image image.Image, sampleArea image.Rectangle, config Config) []color.Color {
-	width := sampleArea.Max.X - sampleArea.Min.X
-	height := sampleArea.Max.Y - sampleArea.Min.Y
-
-	// calculate downsizing ratio
-	stepX := int(math.Max(float64(width)/config.DownSizeTo, 1))
-	stepY := int(math.Max(float64(height)/config.DownSizeTo, 1))
-
 	// load image's pixels into buckets
 	var buckets [2][2][2]bucket
 	totalCount := 0.
-	for x := sampleArea.Min.X; x < sampleArea.Max.X; x += stepX {
-		for y := sampleArea.Min.Y; y < sampleArea.Max.Y; y += stepY {
+	for x := sampleArea.Min.X; x < sampleArea.Max.X; x += config.StepX {
+		for y := sampleArea.Min.Y; y < sampleArea.Max.Y; y += config.StepY {
 			color := image.At(x, y)
 			r, g, b, a := color.RGBA()
 			r >>= 8

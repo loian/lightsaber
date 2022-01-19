@@ -15,7 +15,8 @@ func (s *Screen) DominantColors(screenshot image.Image, samples []image.Rectangl
 	for _, rect := range samples {
 
 		dominantColors := ExtractColorsWithConfig(screenshot, rect, Config{
-			DownSizeTo:  25.,
+			StepX:       25,
+			StepY:       25,
 			SmallBucket: .1,
 		})
 
