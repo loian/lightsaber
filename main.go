@@ -17,7 +17,7 @@ func main() {
 		DisplayIndex: 0,
 		SelectedMode: "color_swirl",
 		Serial: config.Serial{
-			Port: "/dev/tty.usbserial-14310",
+			Port: "/dev/tty.usbserial-110",
 			Baud: 115200,
 		},
 		ColorAdjustment: config.ColorAdjustment{
@@ -41,6 +41,11 @@ func main() {
 				Width:  450,
 				Height: 400,
 			},
+		},
+		Swirl: config.Swirl{
+			PulseDepth:         0.2,
+			PulseSpeed:         0.09,
+			ColorRotationSpeed: 5,
 		},
 	}
 

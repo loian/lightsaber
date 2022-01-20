@@ -34,6 +34,12 @@ type ScreenGrabber struct {
 	Margin Margins `json:"margin"`
 }
 
+type Swirl struct {
+	PulseDepth         float64 //0 - 0.5
+	PulseSpeed         float64 //0.03 0.06 0.09 0.12 0.15 0.18 0.21 0.24 0.27 0.3
+	ColorRotationSpeed int     //1.2.3.5.6.7.8.9.10
+
+}
 type Configuration struct {
 	DisplayIndex    int             `json:"display_index"`
 	SelectedMode    string          `json:"selected_mode"`
@@ -41,4 +47,5 @@ type Configuration struct {
 	ColorAdjustment ColorAdjustment `json:"color_adjustment"`
 	LedGeometry     LedGeometry     `json:"led_geometry"`
 	ScreenGrabber   ScreenGrabber   `json:"screen_grabber"`
+	Swirl           Swirl           `json:"swirl"`
 }

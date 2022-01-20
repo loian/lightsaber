@@ -29,6 +29,7 @@ func (l *Lightsaber) Render() {
 		switch l.config.SelectedMode {
 		case "color_swirl":
 			swirl := NewSwirl(
+				l.config.Swirl,
 				l.config.LedGeometry,
 				l.Lights,
 			)

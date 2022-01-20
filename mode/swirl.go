@@ -13,6 +13,7 @@ import (
 type Swirl struct {
 	ledGeometry config.LedGeometry
 	lights      *hardware.LightsArray
+	swirl       config.Swirl
 }
 
 func (s *Swirl) Stop(port *serial.Port) {
@@ -67,7 +68,7 @@ func (s *Swirl) Render(serialPort *serial.Port, signal chan bool) {
 				b = 255 - lo
 			}
 
-			brightness := math.Pow(0.5+math.Sin(sine2)*0.5, 3.0) * 255.0
+			brightness := math.Pow(0.5+math.Sin(sine2)*s.swirl.PulseDepth, 3.0) * 255.0
 			s.lights.SetLed(
 				i,
 				byte(float64(r)*brightness/255),
@@ -75,9 +76,9 @@ func (s *Swirl) Render(serialPort *serial.Port, signal chan bool) {
 				byte(float64(b)*brightness/255),
 			)
 		}
-		hue1 = (hue1 + 5) % (1536)
-		sine1 -= .03
-		time.Sleep(60 * time.Millisecond)
+		hue1 = (hue1 + s.swirl.ColorRotationSpeed) % (1536)
+		sine1 -= s.swirl.PulseSpeed
+		time.Sleep(80 * time.Millisecond)
 		serialPort.Write(s.lights.Buffer())
 		select {
 		case terminate = <-signal:
@@ -89,9 +90,10 @@ func (s *Swirl) Render(serialPort *serial.Port, signal chan bool) {
 	}
 }
 
-func NewSwirl(geometry config.LedGeometry, array *hardware.LightsArray) *Swirl {
+func NewSwirl(swirl config.Swirl, geometry config.LedGeometry, array *hardware.LightsArray) *Swirl {
 	return &Swirl{
 		geometry,
 		array,
+		swirl,
 	}
 }
