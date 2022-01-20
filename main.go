@@ -47,7 +47,7 @@ func main() {
 	logrus.Info("Starting Lightsaber daemon.")
 	r := gin.Default()
 	r.POST("/start", handler.Start)
-	r.POST("/off", handler.Stop)
+	r.POST("/stop", handler.Stop)
 
 	go r.Run("127.0.0.1:8877")
 
