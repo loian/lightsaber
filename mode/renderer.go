@@ -1,6 +1,7 @@
 package mode
 
 import (
+	"fmt"
 	"github.com/kbinani/screenshot"
 	"github.com/tarm/serial"
 	"lightsaber/config"
@@ -13,42 +14,53 @@ type Renderer interface {
 }
 
 type Lightsaber struct {
-	ConfigSignal          chan config.Configuration
-	TerminateRenderSignal chan bool
-	config                config.Configuration
-	Lights                *hardware.LightsArray
-	SerialPort            *serial.Port
+	TerminateRenderChannel chan bool
+	Lights                 *hardware.LightsArray
 }
 
-func (l *Lightsaber) Render() {
-	select {
-	case l.config = <-l.ConfigSignal:
+func (l *Lightsaber) StopRendering() {
+	renderIsrunningMutex.Lock()
+	stop := renderIsRunning
+	renderIsRunning = false
+	renderIsrunningMutex.Unlock()
+	if stop {
+		l.TerminateRenderChannel <- true
+	}
+}
 
-		l.Lights = hardware.NewArray(l.config.LedGeometry)
+func (l *Lightsaber) Render(configuration config.Configuration, serialPort *serial.Port) {
+	renderIsrunningMutex.Lock()
+	start := !renderIsRunning
+	renderIsRunning = true
+	renderIsrunningMutex.Unlock()
 
-		switch l.config.SelectedMode {
+	if start {
+		fmt.Println("rendering")
+
+		l.Lights = hardware.NewArray(configuration.LedGeometry)
+		switch configuration.SelectedMode {
 		case "color_swirl":
 			swirl := NewSwirl(
-				l.config.Swirl,
-				l.config.LedGeometry,
+				configuration.Swirl,
+				configuration.LedGeometry,
 				l.Lights,
 			)
 
-			go swirl.Render(l.SerialPort, l.TerminateRenderSignal)
+			go swirl.Render(serialPort, l.TerminateRenderChannel)
 		case "screen_grabber":
 			samplesGeometry := hardware.NewSamplesGeometry(
-				screenshot.GetDisplayBounds(l.config.DisplayIndex),
-				l.config.LedGeometry,
-				l.config.ScreenGrabber,
+				screenshot.GetDisplayBounds(configuration.DisplayIndex),
+				configuration.LedGeometry,
+				configuration.ScreenGrabber,
 			)
 
 			screenGrabber := NewScreenGrabber(
-				l.config.DisplayIndex,
-				l.config.ColorAdjustment,
+				configuration.DisplayIndex,
+				configuration.ColorAdjustment,
 				samplesGeometry.Calculate(),
 				l.Lights)
 
-			go screenGrabber.Render(l.SerialPort, l.TerminateRenderSignal)
+			go screenGrabber.Render(serialPort, l.TerminateRenderChannel)
 		}
 	}
 }
