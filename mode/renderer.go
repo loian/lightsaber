@@ -61,6 +61,14 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 				l.Lights)
 
 			go screenGrabber.Render(serialPort, l.TerminateRenderChannel)
+
+		case "vader":
+			vader := NewVader(
+				configuration.Vader,
+				l.Lights,
+			)
+			go vader.Render(serialPort, l.TerminateRenderChannel)
+
 		}
 	}
 }

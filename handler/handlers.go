@@ -19,7 +19,7 @@ func Stop(c *gin.Context) {
 func Start(c *gin.Context) {
 	var conf = config.Configuration{
 		DisplayIndex: 0,
-		SelectedMode: "color_swirl",
+		SelectedMode: "vader",
 		Serial: config.Serial{
 			Port: "/dev/tty.usbserial-110",
 			Baud: 115200,
@@ -50,6 +50,9 @@ func Start(c *gin.Context) {
 			PulseDepth:         0.2,
 			PulseSpeed:         0.09,
 			ColorRotationSpeed: 5,
+		},
+		Vader: config.Vader{
+			Speed: 40,
 		},
 	}
 
