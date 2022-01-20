@@ -1,13 +1,12 @@
 package main
 
 import (
-	"github.com/kbinani/screenshot"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/tarm/serial"
 	"lightsaber/config"
-	"lightsaber/hardware"
+	"lightsaber/handler"
 	"lightsaber/mode"
-	"time"
 )
 
 func main() {
@@ -16,6 +15,7 @@ func main() {
 	//displays := screenshot.NumActiveDisplays()
 	conf := config.Configuration{
 		DisplayIndex: 0,
+		SelectedMode: "color_swirl",
 		Serial: config.Serial{
 			Port: "/dev/tty.usbserial-14310",
 			Baud: 115200,
@@ -52,37 +52,17 @@ func main() {
 		panic("serial connection failed")
 	}
 
-	lights := hardware.NewArray(conf.LedGeometry)
+	lightSaber := mode.Lightsaber{
+		SerialPort:            serialPort,
+		ConfigSignal:          config.ConfigurationChannel,
+		TerminateRenderSignal: mode.TerminateRenderChannel,
+	}
 
-	samplesGeometry := hardware.NewSamplesGeometry(
-		screenshot.GetDisplayBounds(conf.DisplayIndex),
-		conf.LedGeometry,
-		conf.ScreenGrabber,
-	)
+	r := gin.Default()
+	r.POST("/off", handler.TurnOff)
 
-	swirl := mode.NewSwirl(
-		conf.LedGeometry,
-		lights,
-	)
-
-	swirl.Render(serialPort)
-
-	screenGrabber := mode.NewScreenGrabber(
-		conf.DisplayIndex,
-		conf.ColorAdjustment,
-		samplesGeometry.Calculate(),
-		lights)
-
-	ticker := time.NewTicker(60 * time.Millisecond)
-
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				screenGrabber.Render(serialPort)
-			}
-		}
-	}()
-
+	go r.Run("127.0.0.1:8877")
+	go lightSaber.Render()
+	config.ConfigurationChannel <- conf
 	select {}
 }

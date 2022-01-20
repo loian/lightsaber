@@ -15,11 +15,25 @@ type Swirl struct {
 	lights      *hardware.LightsArray
 }
 
-func (s *Swirl) Render(serialPort *serial.Port) {
+func (s *Swirl) Stop(port *serial.Port) {
+
+	for i := 0; i < s.lights.NumberOfLights(); i++ {
+		s.lights.SetLed(i, 0, 0, 0)
+	}
+
+	//TODO: implement signaling rather than this crap solution
+	time.Sleep(1000 * time.Millisecond)
+
+	port.Write(s.lights.Buffer())
+}
+
+func (s *Swirl) Render(serialPort *serial.Port, signal chan bool) {
 	sine1 := 0.
 	hue1 := 0
 	var r, g, b byte
-	for {
+	var terminate = false
+	for terminate == false {
+
 		sine2 := sine1
 		hue2 := hue1
 		total := s.ledGeometry.Right + s.ledGeometry.Top + s.ledGeometry.Left + s.ledGeometry.Bottom
@@ -65,6 +79,13 @@ func (s *Swirl) Render(serialPort *serial.Port) {
 		sine1 -= .03
 		time.Sleep(60 * time.Millisecond)
 		serialPort.Write(s.lights.Buffer())
+		select {
+		case terminate = <-signal:
+			s.Stop(serialPort)
+			return
+		default:
+
+		}
 	}
 }
 
