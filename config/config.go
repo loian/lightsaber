@@ -44,10 +44,16 @@ type Vader struct {
 	Speed int //1...100
 }
 
-type Backlight struct {
+type RGB struct {
 	R byte `json:"r"`
 	G byte `json:"g"`
 	B byte `json:"b"`
+}
+
+type Backlight RGB
+
+type Custom struct {
+	Leds []RGB
 }
 
 type Configuration struct {
@@ -60,4 +66,5 @@ type Configuration struct {
 	Swirl           Swirl           `json:"swirl"`
 	Vader           Vader           `json:"vader"`
 	Backlight       Backlight       `json:"backlight"`
+	Custom          Custom          `json:"custom"`
 }
