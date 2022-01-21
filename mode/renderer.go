@@ -1,7 +1,6 @@
 package mode
 
 import (
-	"fmt"
 	"github.com/kbinani/screenshot"
 	"github.com/tarm/serial"
 	"lightsaber/config"
@@ -35,8 +34,6 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 	renderIsrunningMutex.Unlock()
 
 	if start {
-		fmt.Println("rendering")
-
 		l.Lights = hardware.NewArray(configuration.LedGeometry)
 		switch configuration.SelectedMode {
 		case "color_swirl":
@@ -69,6 +66,9 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 			)
 			go vader.Render(serialPort, l.TerminateRenderChannel)
 
+		case "backlight":
+			backlight := NewBacklight(configuration.Backlight, l.Lights)
+			go backlight.Render(serialPort, l.TerminateRenderChannel)
 		}
 	}
 }

@@ -19,9 +19,9 @@ func Stop(c *gin.Context) {
 func Start(c *gin.Context) {
 	var conf = config.Configuration{
 		DisplayIndex: 0,
-		SelectedMode: "vader",
+		SelectedMode: "backlight",
 		Serial: config.Serial{
-			Port: "/dev/tty.usbserial-110",
+			Port: "/dev/tty.usbserial-14310",
 			Baud: 115200,
 		},
 		ColorAdjustment: config.ColorAdjustment{
@@ -53,6 +53,11 @@ func Start(c *gin.Context) {
 		},
 		Vader: config.Vader{
 			Speed: 40,
+		},
+		Backlight: config.Backlight{
+			R: 255,
+			G: 255,
+			B: 0,
 		},
 	}
 

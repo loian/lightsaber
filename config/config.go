@@ -43,6 +43,13 @@ type Swirl struct {
 type Vader struct {
 	Speed int //1...100
 }
+
+type Backlight struct {
+	R byte `json:"r"`
+	G byte `json:"g"`
+	B byte `json:"b"`
+}
+
 type Configuration struct {
 	DisplayIndex    int             `json:"display_index"`
 	SelectedMode    string          `json:"selected_mode"`
@@ -52,4 +59,5 @@ type Configuration struct {
 	ScreenGrabber   ScreenGrabber   `json:"screen_grabber"`
 	Swirl           Swirl           `json:"swirl"`
 	Vader           Vader           `json:"vader"`
+	Backlight       Backlight       `json:"backlight"`
 }
