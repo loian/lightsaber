@@ -19,9 +19,9 @@ func Stop(c *gin.Context) {
 func Start(c *gin.Context) {
 	var conf = config.Configuration{
 		DisplayIndex: 0,
-		SelectedMode: "custom",
+		SelectedMode: "ocean",
 		Serial: config.Serial{
-			Port: "/dev/tty.usbserial-14310",
+			Port: "/dev/tty.usbserial-110",
 			Baud: 115200,
 		},
 		ColorAdjustment: config.ColorAdjustment{

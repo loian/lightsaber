@@ -8,12 +8,12 @@ import (
 	"time"
 )
 
-type Custom struct {
+type CustomScene struct {
 	config config.Custom
 	lights *hardware.LightsArray
 }
 
-func (c *Custom) Stop(port *serial.Port) {
+func (c *CustomScene) Stop(port *serial.Port) {
 
 	for i := 0; i < c.lights.NumberOfLights(); i++ {
 		c.lights.SetLed(i, 0, 0, 0)
@@ -25,7 +25,7 @@ func (c *Custom) Stop(port *serial.Port) {
 	port.Write(c.lights.Buffer())
 }
 
-func (c *Custom) Render(serialPort *serial.Port, signal chan bool) {
+func (c *CustomScene) Render(serialPort *serial.Port, signal chan bool) {
 	for i, rgb := range c.config.Leds {
 		c.lights.SetLed(i, rgb.R, rgb.G, rgb.B)
 		fmt.Println(rgb)
@@ -44,8 +44,8 @@ func (c *Custom) Render(serialPort *serial.Port, signal chan bool) {
 	}
 }
 
-func NewCustom(conf config.Custom, array *hardware.LightsArray) Custom {
-	return Custom{
+func NewCustom(conf config.Custom, array *hardware.LightsArray) CustomScene {
+	return CustomScene{
 		conf,
 		array,
 	}

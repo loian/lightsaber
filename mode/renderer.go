@@ -70,9 +70,13 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 			backlight := NewBacklight(configuration.Backlight, l.Lights)
 			go backlight.Render(serialPort, l.TerminateRenderChannel)
 
-		case "custom":
-			custom := NewCustom(configuration.Custom, l.Lights)
-			go custom.Render(serialPort, l.TerminateRenderChannel)
+		case "custom_scene":
+			customScene := NewCustom(configuration.Custom, l.Lights)
+			go customScene.Render(serialPort, l.TerminateRenderChannel)
+
+		case "ocean":
+			ocean := NewOcean(l.Lights)
+			go ocean.Render(serialPort, l.TerminateRenderChannel)
 		}
 	}
 
