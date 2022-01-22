@@ -1,47 +1,47 @@
 package config
 
 type Serial struct {
-	Port string `json:"port"`
-	Baud int    `json:"baud"`
+	Port string `json:"port" binding:"required"`
+	Baud int    `json:"baud" binding:"required,oneof=9600 19200 38400 57600 115200"`
 }
 
 type LedGeometry struct {
-	Offset int `json:"offset"`
-	Right  int `json:"right"`
-	Top    int `json:"top"`
-	Left   int `json:"left"`
-	Bottom int `json:"bottom"`
+	Offset *int `json:"offset" binding:"required,numeric"`
+	Right  *int `json:"right" binding:"required,numeric"`
+	Top    *int `json:"top" binding:"required,numeric"`
+	Left   *int `json:"left" binding:"required,numeric"`
+	Bottom *int `json:"bottom" binding:"required,numeric"`
 }
 
 type ColorAdjustment struct {
-	DarkenPercentage float64 `json:"darken_percentage"`
+	DarkenPercentage *float64 `json:"darken_percentage" binding:"required,numeric"`
 }
 
 type Margins struct {
-	Right  int `json:"right"`
-	Top    int `json:"top"`
-	Left   int `json:"left"`
-	Bottom int `json:"bottom"`
+	Right  *int `json:"right" binding:"required,numeric"`
+	Top    *int `json:"top" binding:"required,numeric"`
+	Left   *int `json:"left" binding:"required,numeric"`
+	Bottom *int `json:"bottom" binding:"required,numeric"`
 }
 
 type Size struct {
-	Width  int `json:"width"`
-	Height int `json:"height"`
+	Width  *int `json:"width" binding:"required,numeric"`
+	Height *int `json:"height" binding:"required,numeric"`
 }
 
 type ScreenGrabber struct {
-	Size   Size    `json:"size"`
-	Margin Margins `json:"margin"`
+	Size   Size    `json:"size" binding:"required,dive"`
+	Margin Margins `json:"margin" binding:"required,dive"`
 }
 
 type Swirl struct {
-	PulseDepth         float64 //0 - 0.5
-	PulseSpeed         float64 //0.03 0.06 0.09 0.12 0.15 0.18 0.21 0.24 0.27 0.3
-	ColorRotationSpeed int     //1.2.3.5.6.7.8.9.10
+	PulseDepth         *float64 `json:"pulse_depth" binding:"required,numeric"`          //0 - 0.5
+	PulseSpeed         *float64 `json:"pulse_speed" binding:"required,numeric"`          //0.03 0.06 0.09 0.12 0.15 0.18 0.21 0.24 0.27 0.3
+	ColorRotationSpeed *int     `json:"color_rotation_speed" binding:"required,numeric"` //1.2.3.5.6.7.8.9.10
 }
 
 type Vader struct {
-	Speed int //1...100
+	Speed *int `json:"speed" binding:"required,numeric"` //1...100
 }
 
 type RGB struct {
@@ -53,18 +53,18 @@ type RGB struct {
 type Backlight RGB
 
 type Custom struct {
-	Leds []RGB
+	Leds []RGB `json:"leds" binding:"required"`
 }
 
 type Configuration struct {
-	DisplayIndex    int             `json:"display_index"`
-	SelectedMode    string          `json:"selected_mode"`
-	Serial          Serial          `json:"serial"`
-	ColorAdjustment ColorAdjustment `json:"color_adjustment"`
-	LedGeometry     LedGeometry     `json:"led_geometry"`
-	ScreenGrabber   ScreenGrabber   `json:"screen_grabber"`
-	Swirl           Swirl           `json:"swirl"`
-	Vader           Vader           `json:"vader"`
-	Backlight       Backlight       `json:"backlight"`
-	Custom          Custom          `json:"custom"`
+	DisplayIndex    *int            `json:"display_index" binding:"required,numeric"`
+	SelectedMode    *string         `json:"selected_mode" binding:"required"`
+	Serial          Serial          `json:"serial" binding:"required,dive"`
+	ColorAdjustment ColorAdjustment `json:"color_adjustment" binding:"required"`
+	LedGeometry     LedGeometry     `json:"led_geometry" binding:"required"`
+	ScreenGrabber   ScreenGrabber   `json:"screen_grabber" binding:"required,dive"`
+	Swirl           Swirl           `json:"swirl" binding:"required"`
+	Vader           Vader           `json:"vader" binding:"required"`
+	Backlight       Backlight       `json:"backlight" binding:"required"`
+	Custom          Custom          `json:"custom_scene" binding:"required"`
 }

@@ -24,6 +24,7 @@ func (sg *ScreenGrabber) Stop(port *serial.Port) {
 	}
 	//TODO: implement signaling rather than this crap solution
 	time.Sleep(1000 * time.Millisecond)
+	port.Write(sg.lights.Buffer())
 }
 
 func (sg *ScreenGrabber) Render(port *serial.Port, signal chan bool) {
@@ -42,7 +43,7 @@ func (sg *ScreenGrabber) Render(port *serial.Port, signal chan bool) {
 			for pos, c := range colors {
 				//TODO: move the color adjustment in a separate class or decorate the lights struct
 				r, g, b := util.ToRGB256(c)
-				r, g, b = util.Darken(r, g, b, sg.colorAdjustment.DarkenPercentage)
+				r, g, b = util.Darken(r, g, b, *sg.colorAdjustment.DarkenPercentage)
 				sg.lights.SetLed(pos, r, g, b)
 			}
 			_, err := port.Write(sg.lights.Buffer())

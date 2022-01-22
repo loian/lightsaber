@@ -37,7 +37,7 @@ func (s *Swirl) Render(serialPort *serial.Port, signal chan bool) {
 
 		sine2 := sine1
 		hue2 := hue1
-		total := s.ledGeometry.Right + s.ledGeometry.Top + s.ledGeometry.Left + s.ledGeometry.Bottom
+		total := *s.ledGeometry.Right + *s.ledGeometry.Top + *s.ledGeometry.Left + *s.ledGeometry.Bottom
 
 		for i := 0; i < total; i++ {
 			lo := byte(hue2 & 255)
@@ -68,7 +68,7 @@ func (s *Swirl) Render(serialPort *serial.Port, signal chan bool) {
 				b = 255 - lo
 			}
 
-			brightness := math.Pow(0.5+math.Sin(sine2)*s.swirl.PulseDepth, 3.0) * 255.0
+			brightness := math.Pow(0.5+math.Sin(sine2)**s.swirl.PulseDepth, 3.0) * 255.0
 			s.lights.SetLed(
 				i,
 				byte(float64(r)*brightness/255),
@@ -76,8 +76,8 @@ func (s *Swirl) Render(serialPort *serial.Port, signal chan bool) {
 				byte(float64(b)*brightness/255),
 			)
 		}
-		hue1 = (hue1 + s.swirl.ColorRotationSpeed) % (1536)
-		sine1 -= s.swirl.PulseSpeed
+		hue1 = (hue1 + *s.swirl.ColorRotationSpeed) % (1536)
+		sine1 -= *s.swirl.PulseSpeed
 		time.Sleep(80 * time.Millisecond)
 		serialPort.Write(s.lights.Buffer())
 		select {

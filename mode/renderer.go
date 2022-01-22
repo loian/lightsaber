@@ -35,7 +35,7 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 
 	if start {
 		l.Lights = hardware.NewArray(configuration.LedGeometry)
-		switch configuration.SelectedMode {
+		switch *configuration.SelectedMode {
 		case "color_swirl":
 			swirl := NewSwirl(
 				configuration.Swirl,
@@ -46,13 +46,13 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 			go swirl.Render(serialPort, l.TerminateRenderChannel)
 		case "screen_grabber":
 			samplesGeometry := hardware.NewSamplesGeometry(
-				screenshot.GetDisplayBounds(configuration.DisplayIndex),
+				screenshot.GetDisplayBounds(*configuration.DisplayIndex),
 				configuration.LedGeometry,
 				configuration.ScreenGrabber,
 			)
 
 			screenGrabber := NewScreenGrabber(
-				configuration.DisplayIndex,
+				*configuration.DisplayIndex,
 				configuration.ColorAdjustment,
 				samplesGeometry.Calculate(),
 				l.Lights)

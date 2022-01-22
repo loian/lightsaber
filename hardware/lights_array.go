@@ -36,11 +36,11 @@ func (la *LightsArray) Buffer() []byte {
 
 func NewArray(geometry config.LedGeometry) *LightsArray {
 
-	total := geometry.Right + geometry.Top + geometry.Left + geometry.Bottom
+	total := *geometry.Right + *geometry.Top + *geometry.Left + *geometry.Bottom
 	positions := make([]int, total)
 
 	for i := 0; i < int(total); i++ {
-		currentLed := i - geometry.Offset
+		currentLed := i - *geometry.Offset
 		if currentLed > total {
 			currentLed = currentLed - total
 		}

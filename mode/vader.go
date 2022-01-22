@@ -47,7 +47,7 @@ func (v *Vader) Render(serialPort *serial.Port, signal chan bool) {
 			i++
 		}
 
-		time.Sleep(time.Duration(1-v.config.Speed) * time.Millisecond)
+		time.Sleep(time.Duration(1-*v.config.Speed) * time.Millisecond)
 		serialPort.Write(v.lights.Buffer())
 		select {
 		case terminate = <-signal:
