@@ -8,14 +8,15 @@ import (
 )
 
 type Backlight struct {
-	config config.Backlight
-	lights *hardware.LightsArray
+	config          config.Backlight
+	colorAdjustment ColorAdjustment
+	lights          *hardware.LightsArray
 }
 
 func (v *Backlight) Stop(port *serial.Port) {
 
 	for i := 0; i < v.lights.NumberOfLights(); i++ {
-		v.lights.SetLed(i, 0, 0, 0)
+		v.lights.SetLed(i, hardware.Led{0, 0, 0})
 	}
 
 	//TODO: implement signaling rather than this crap solution
@@ -27,7 +28,9 @@ func (v *Backlight) Stop(port *serial.Port) {
 func (b *Backlight) Render(serialPort *serial.Port, signal chan bool) {
 	n := b.lights.NumberOfLights()
 	for k := 0; k < n; k++ {
-		b.lights.SetLed(k, b.config.R, b.config.G, b.config.B)
+		b.lights.SetLed(k,
+			b.colorAdjustment.Adjust(hardware.Led{R: b.config.R, G: b.config.G, B: b.config.B}),
+		)
 	}
 	var terminate = false
 	for terminate == false {
@@ -42,9 +45,10 @@ func (b *Backlight) Render(serialPort *serial.Port, signal chan bool) {
 		}
 	}
 }
-func NewBacklight(backlight config.Backlight, array *hardware.LightsArray) Backlight {
+func NewBacklight(backlight config.Backlight, colorAdjustment ColorAdjustment, array *hardware.LightsArray) Backlight {
 	return Backlight{
 		backlight,
+		colorAdjustment,
 		array,
 	}
 }

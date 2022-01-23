@@ -11,15 +11,16 @@ import (
 )
 
 type Swirl struct {
-	ledGeometry config.LedGeometry
-	lights      *hardware.LightsArray
-	swirl       config.Swirl
+	ledGeometry     config.LedGeometry
+	colorAdjustment ColorAdjustment
+	swirl           config.Swirl
+	lights          *hardware.LightsArray
 }
 
 func (s *Swirl) Stop(port *serial.Port) {
 
 	for i := 0; i < s.lights.NumberOfLights(); i++ {
-		s.lights.SetLed(i, 0, 0, 0)
+		s.lights.SetLed(i, hardware.Led{0, 0, 0})
 	}
 
 	//TODO: implement signaling rather than this crap solution
@@ -71,9 +72,13 @@ func (s *Swirl) Render(serialPort *serial.Port, signal chan bool) {
 			brightness := math.Pow(0.5+math.Sin(sine2)**s.swirl.PulseDepth, 3.0) * 255.0
 			s.lights.SetLed(
 				i,
-				byte(float64(r)*brightness/255),
-				byte(float64(g)*brightness/255),
-				byte(float64(b)*brightness/255),
+				s.colorAdjustment.Adjust(
+					hardware.Led{
+						byte(float64(r) * brightness / 255),
+						byte(float64(g) * brightness / 255),
+						byte(float64(b) * brightness / 255),
+					},
+				),
 			)
 		}
 		hue1 = (hue1 + *s.swirl.ColorRotationSpeed) % (1536)
@@ -90,10 +95,11 @@ func (s *Swirl) Render(serialPort *serial.Port, signal chan bool) {
 	}
 }
 
-func NewSwirl(swirl config.Swirl, geometry config.LedGeometry, array *hardware.LightsArray) *Swirl {
+func NewSwirl(swirl config.Swirl, colorAdjustment ColorAdjustment, geometry config.LedGeometry, array *hardware.LightsArray) *Swirl {
 	return &Swirl{
 		geometry,
-		array,
+		colorAdjustment,
 		swirl,
+		array,
 	}
 }

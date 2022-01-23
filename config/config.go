@@ -14,7 +14,11 @@ type LedGeometry struct {
 }
 
 type ColorAdjustment struct {
-	DarkenPercentage *float64 `json:"darken_percentage" binding:"required,numeric"`
+	Darken     *float64 `json:"darken" binding:"required,numeric"`
+	Brighten   *float64 `json:"brighten" binding:"required,numeric"`
+	Saturate   *float64 `json:"saturate" binding:"required,numeric"`
+	Desaturate *float64 `json:"desaturate" binding:"required,numeric"`
+	Hue        *float64 `json:"hue" binding:"required,numeric"`
 }
 
 type Margins struct {

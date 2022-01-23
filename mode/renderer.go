@@ -37,8 +37,11 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 		l.Lights = hardware.NewArray(configuration.LedGeometry)
 		switch *configuration.SelectedMode {
 		case "color_swirl":
+			colorAdj := ColorAdjustment{configuration.ColorAdjustment}
+
 			swirl := NewSwirl(
 				configuration.Swirl,
+				colorAdj,
 				configuration.LedGeometry,
 				l.Lights,
 			)
@@ -51,31 +54,38 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 				configuration.ScreenGrabber,
 			)
 
+			colorAdj := ColorAdjustment{configuration.ColorAdjustment}
+
 			screenGrabber := NewScreenGrabber(
 				*configuration.DisplayIndex,
-				configuration.ColorAdjustment,
+				colorAdj,
 				samplesGeometry.Calculate(),
 				l.Lights)
 
 			go screenGrabber.Render(serialPort, l.TerminateRenderChannel)
 
 		case "vader":
+			colorAdj := ColorAdjustment{configuration.ColorAdjustment}
 			vader := NewVader(
 				configuration.Vader,
+				colorAdj,
 				l.Lights,
 			)
 			go vader.Render(serialPort, l.TerminateRenderChannel)
 
 		case "backlight":
-			backlight := NewBacklight(configuration.Backlight, l.Lights)
+			colorAdj := ColorAdjustment{configuration.ColorAdjustment}
+			backlight := NewBacklight(configuration.Backlight, colorAdj, l.Lights)
 			go backlight.Render(serialPort, l.TerminateRenderChannel)
 
 		case "custom_scene":
-			customScene := NewCustom(configuration.Custom, l.Lights)
+			colorAdj := ColorAdjustment{configuration.ColorAdjustment}
+			customScene := NewCustom(configuration.Custom, colorAdj, l.Lights)
 			go customScene.Render(serialPort, l.TerminateRenderChannel)
 
 		case "ocean":
-			ocean := NewOcean(l.Lights)
+			colorAdj := ColorAdjustment{configuration.ColorAdjustment}
+			ocean := NewOcean(colorAdj, l.Lights)
 			go ocean.Render(serialPort, l.TerminateRenderChannel)
 		}
 	}

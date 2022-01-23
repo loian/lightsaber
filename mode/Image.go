@@ -1,20 +1,21 @@
-package hardware
+package mode
 
 import (
 	"image"
 	"image/color"
+	"lightsaber/hardware"
 )
 
-type Screen struct {
+type Image struct {
 }
 
-func (s *Screen) DominantColors(screenshot image.Image, samples []image.Rectangle) []color.Color {
+func (s *Image) DominantColors(screenshot image.Image, samples []image.Rectangle) []color.Color {
 
 	var colors []color.Color
 
 	for _, rect := range samples {
 
-		dominantColors := ExtractColorsWithConfig(screenshot, rect, Config{
+		dominantColors := hardware.ExtractColorsWithConfig(screenshot, rect, hardware.Config{
 			StepX:       25,
 			StepY:       25,
 			SmallBucket: .1,

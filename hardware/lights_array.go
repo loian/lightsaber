@@ -20,10 +20,10 @@ type LightsArray struct {
 	buffer    []byte
 }
 
-func (la *LightsArray) SetLed(position int, r byte, g byte, b byte) {
-	la.buffer[la.positions[position]*3+HEADER_COUNT+R_OFFSET] = r
-	la.buffer[la.positions[position]*3+HEADER_COUNT+G_OFFSET] = g
-	la.buffer[la.positions[position]*3+HEADER_COUNT+B_OFFSET] = b
+func (la *LightsArray) SetLed(position int, led Led) {
+	la.buffer[la.positions[position]*3+HEADER_COUNT+R_OFFSET] = led.R
+	la.buffer[la.positions[position]*3+HEADER_COUNT+G_OFFSET] = led.G
+	la.buffer[la.positions[position]*3+HEADER_COUNT+B_OFFSET] = led.B
 }
 
 func (la *LightsArray) NumberOfLights() int {
@@ -62,8 +62,9 @@ func NewArray(geometry config.LedGeometry) *LightsArray {
 		positions,
 		buffer,
 	}
+
 	for i := 0; i < total; i++ {
-		lights.SetLed(i, 255, 255, 255)
+		lights.SetLed(i, Led{255, 255, 255})
 	}
 
 	return lights

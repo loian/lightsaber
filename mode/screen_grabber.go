@@ -5,7 +5,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/tarm/serial"
 	"image"
-	"lightsaber/config"
 	"lightsaber/hardware"
 	"lightsaber/util"
 	"time"
@@ -13,14 +12,14 @@ import (
 
 type ScreenGrabber struct {
 	displayIndex    int
-	colorAdjustment config.ColorAdjustment
+	colorAdjustment ColorAdjustment
 	sampleAreas     []image.Rectangle
 	lights          *hardware.LightsArray
 }
 
 func (sg *ScreenGrabber) Stop(port *serial.Port) {
 	for i := 0; i < sg.lights.NumberOfLights(); i++ {
-		sg.lights.SetLed(i, 0, 0, 0)
+		sg.lights.SetLed(i, hardware.Led{0, 0, 0})
 	}
 	//TODO: implement signaling rather than this crap solution
 	time.Sleep(1000 * time.Millisecond)
@@ -29,7 +28,7 @@ func (sg *ScreenGrabber) Stop(port *serial.Port) {
 
 func (sg *ScreenGrabber) Render(port *serial.Port, signal chan bool) {
 
-	screen := hardware.Screen{}
+	screen := Image{}
 	ticker := time.NewTicker(60 * time.Millisecond)
 
 	for {
@@ -43,8 +42,7 @@ func (sg *ScreenGrabber) Render(port *serial.Port, signal chan bool) {
 			for pos, c := range colors {
 				//TODO: move the color adjustment in a separate class or decorate the lights struct
 				r, g, b := util.ToRGB256(c)
-				r, g, b = util.Darken(r, g, b, *sg.colorAdjustment.DarkenPercentage)
-				sg.lights.SetLed(pos, r, g, b)
+				sg.lights.SetLed(pos, sg.colorAdjustment.Adjust(hardware.Led{r, g, b}))
 			}
 			_, err := port.Write(sg.lights.Buffer())
 			if err != nil {
@@ -57,7 +55,7 @@ func (sg *ScreenGrabber) Render(port *serial.Port, signal chan bool) {
 
 func NewScreenGrabber(
 	displayIndex int,
-	colorAdjustment config.ColorAdjustment,
+	colorAdjustment ColorAdjustment,
 	sampleAreas []image.Rectangle,
 	lights *hardware.LightsArray) *ScreenGrabber {
 	return &ScreenGrabber{

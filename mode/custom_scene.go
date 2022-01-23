@@ -1,7 +1,6 @@
 package mode
 
 import (
-	"fmt"
 	"github.com/tarm/serial"
 	"lightsaber/config"
 	"lightsaber/hardware"
@@ -9,14 +8,15 @@ import (
 )
 
 type CustomScene struct {
-	config config.Custom
-	lights *hardware.LightsArray
+	config          config.Custom
+	colorAdjustment ColorAdjustment
+	lights          *hardware.LightsArray
 }
 
 func (c *CustomScene) Stop(port *serial.Port) {
 
 	for i := 0; i < c.lights.NumberOfLights(); i++ {
-		c.lights.SetLed(i, 0, 0, 0)
+		c.lights.SetLed(i, hardware.Led{0, 0, 0})
 	}
 
 	//TODO: implement signaling rather than this crap solution
@@ -27,9 +27,11 @@ func (c *CustomScene) Stop(port *serial.Port) {
 
 func (c *CustomScene) Render(serialPort *serial.Port, signal chan bool) {
 	for i, rgb := range c.config.Leds {
-		c.lights.SetLed(i, rgb.R, rgb.G, rgb.B)
-		fmt.Println(rgb)
+		c.lights.SetLed(i,
+			c.colorAdjustment.Adjust(hardware.Led{R: rgb.R, G: rgb.G, B: rgb.B}),
+		)
 	}
+
 	var terminate = false
 	for terminate == false {
 		time.Sleep(100 * time.Millisecond)
@@ -44,9 +46,10 @@ func (c *CustomScene) Render(serialPort *serial.Port, signal chan bool) {
 	}
 }
 
-func NewCustom(conf config.Custom, array *hardware.LightsArray) CustomScene {
+func NewCustom(conf config.Custom, colorAdjustment ColorAdjustment, array *hardware.LightsArray) CustomScene {
 	return CustomScene{
 		conf,
+		colorAdjustment,
 		array,
 	}
 }
