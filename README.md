@@ -1,6 +1,9 @@
 # lightsaber
+Endpoints:
+- POST /stop
+- POST /start
 
-Sample start payload
+Example of a start request body:
 
 ```json
 {
