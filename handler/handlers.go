@@ -220,8 +220,9 @@ func Start(c *gin.Context) {
 	logrus.Info("Connecting to the serial port ", conf.Serial.Port)
 
 	if err != nil {
-		logrus.Fatal("Unable to connect to the serial port: ", err)
-		panic("serial connection failed")
+		logrus.Error("Unable to connect to the serial port: ", err)
+		c.JSON(400, gin.H{"status": "wrong port or already busy"})
+		return
 	}
 
 	lightSaber := mode.Lightsaber{
