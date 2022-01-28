@@ -33,8 +33,11 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 	renderIsRunning = true
 	renderIsrunningMutex.Unlock()
 
+	l.Lights = hardware.NewArray(configuration.LedGeometry)
+	//shut down the lights
+	serialPort.Write(l.Lights.Buffer())
+
 	if start {
-		l.Lights = hardware.NewArray(configuration.LedGeometry)
 		switch *configuration.SelectedMode {
 		case "color_swirl":
 			colorAdj := ColorAdjustment{configuration.ColorAdjustment}
@@ -89,5 +92,4 @@ func (l *Lightsaber) Render(configuration config.Configuration, serialPort *seri
 			go ocean.Render(serialPort, l.TerminateRenderChannel)
 		}
 	}
-
 }

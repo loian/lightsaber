@@ -50,7 +50,6 @@ func (sg *ScreenGrabber) Render(port *serial.Port, signal chan bool) {
 			}
 		}
 	}
-
 }
 
 func NewScreenGrabber(

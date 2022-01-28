@@ -62,10 +62,11 @@ func NewArray(geometry config.LedGeometry) *LightsArray {
 		positions,
 		buffer,
 	}
-
-	for i := 0; i < total; i++ {
-		lights.SetLed(i, Led{255, 255, 255})
-	}
-
 	return lights
+}
+
+func (la *LightsArray) Reset() {
+	for i := 0; i < la.NumberOfLights(); i++ {
+		la.SetLed(i, Led{0, 0, 0})
+	}
 }
