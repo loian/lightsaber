@@ -11,8 +11,11 @@ func main() {
 	r := gin.Default()
 	r.POST("/start", handler.Start)
 	r.POST("/stop", handler.Stop)
+	r.POST("/quit", handler.Quit)
 
-	go r.Run("127.0.0.1:8877")
-
+	err := r.Run("127.0.0.1:8877")
+	if err != nil {
+		logrus.Fatal(err)
+	}
 	select {}
 }

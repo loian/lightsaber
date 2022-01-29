@@ -6,7 +6,18 @@ import (
 	"github.com/tarm/serial"
 	"lightsaber/config"
 	"lightsaber/mode"
+	"os"
+	"time"
 )
+
+func Quit(c *gin.Context) {
+	c.JSON(200, gin.H{"status": "terminated"})
+	go func() {
+		time.Sleep(500 * time.Millisecond)
+		os.Exit(0)
+	}()
+	return
+}
 
 func Stop(c *gin.Context) {
 	lightSaber := mode.Lightsaber{
