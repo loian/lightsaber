@@ -36,6 +36,7 @@ func (sg *ScreenGrabber) Render(port *serial.Port, signal chan bool) {
 		case <-signal:
 			ticker.Stop()
 			sg.Stop(port)
+			return
 		case <-ticker.C:
 			img, _ := screenshot.CaptureDisplay(sg.displayIndex)
 			colors := screen.DominantColors(img, sg.sampleAreas)
