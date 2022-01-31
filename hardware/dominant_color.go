@@ -1,5 +1,9 @@
 package hardware
 
+// code ported from
+// the credit goes to its original authors
+// https://github.com/marekm4/color-extractor/blob/master/color_extractor.go
+
 import (
 	"image"
 	"image/color"
