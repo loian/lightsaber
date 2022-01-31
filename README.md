@@ -3,6 +3,9 @@
 A simple server to control adalights led strips.
 Not yet mature, absolutely untested, but it seems working.
 
+to run it `lightsaber 8877`
+
+
 ##installation
 install the go toolchain (brew install go)
 Build the server
