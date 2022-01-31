@@ -6,7 +6,7 @@ Not yet mature, absolutely untested, but it seems working.
 to run it `lightsaber 8877`
 
 
-##installation
+## installation
 install the go toolchain (brew install go)
 Build the server
 `go build`
@@ -29,7 +29,7 @@ start it
 `launchctl start loian.lightsaber`
 
 
-##Endpoints:
+## Endpoints:
 - POST /stop
 - POST /start
 
