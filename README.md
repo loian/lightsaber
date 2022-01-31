@@ -1,6 +1,7 @@
 # lightsaber
 
 A simple server to control adalights led strips.
+Not yet mature, absolutely untested, but it seems working.
 
 ##installation
 install the go toolchain (brew install go)
