@@ -6,7 +6,7 @@ Not yet mature, absolutely untested, but it seems working.
 to run it `lightsaber 8877`
 
 
-## installation
+## installation (MacOS)
 install the go toolchain (brew install go)
 Build the server
 `go build`
