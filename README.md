@@ -6,7 +6,7 @@ Not yet mature, absolutely untested, but it seems working.
 to run it `lightsaber 8877`
 
 
-## installation
+## installation (MacOS)
 install the go toolchain (brew install go)
 Build the server
 `go build`
@@ -19,8 +19,7 @@ create a folder for the log files:
 `mkdir ~/Library/Application\ Support/loian.lightsaber`
 
 copy the plist to the launch agent directory
-
-cp loian.libhtsaber.plist ~/Library/LaunchAgents/
+`cp loian.libhtsaber.plist ~/Library/LaunchAgents/`
 
 register the daemon
 `launchctl load ~/Library/LaunchAgents/loian.lightsaber.plist`
