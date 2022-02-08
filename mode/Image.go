@@ -1,6 +1,7 @@
 package mode
 
 import (
+	"github.com/sirupsen/logrus"
 	"image"
 	"image/color"
 	"lightsaber/hardware"
@@ -10,7 +11,12 @@ type Image struct {
 }
 
 func (s *Image) DominantColors(screenshot image.Image, samples []image.Rectangle) []color.Color {
-
+	defer func() {
+		//Recover() can print the captured panic information
+		if err := recover(); err != nil {
+			logrus.Error("Frame skipped, failed to calculate dominant colors")
+		}
+	}()
 	var colors []color.Color
 
 	for _, rect := range samples {
