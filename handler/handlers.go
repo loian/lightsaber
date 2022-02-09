@@ -27,6 +27,18 @@ func Stop(c *gin.Context) {
 	c.JSON(200, gin.H{"status": "stopped"})
 }
 
+func Status(c *gin.Context) {
+	lightSaber := mode.Lightsaber{
+		TerminateRenderChannel: mode.TerminateRenderChannel,
+	}
+
+	if (lightSaber.IsRunning()) {
+		c.JSON(200, gin.H{"status": "started"})
+	} else {
+		c.JSON(200, gin.H{"status": "stopped"})
+	}
+}
+
 func Start(c *gin.Context) {
 
 	var conf config.Configuration
@@ -50,6 +62,7 @@ func Start(c *gin.Context) {
 	lightSaber := mode.Lightsaber{
 		TerminateRenderChannel: mode.TerminateRenderChannel,
 	}
+	
 	lightSaber.StopRendering()
 	lightSaber.Render(conf, serialPort)
 

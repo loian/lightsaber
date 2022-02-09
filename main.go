@@ -30,6 +30,7 @@ func main() {
 	r.POST("/start", handler.Start)
 	r.POST("/stop", handler.Stop)
 	r.POST("/quit", handler.Quit)
+	r.POST("/status", handler.Status)
 
 	err := r.Run("127.0.0.1:" + args[0])
 	if err != nil {

@@ -27,6 +27,10 @@ func (l *Lightsaber) StopRendering() {
 	}
 }
 
+func (l *Lightsaber) IsRunning() bool {
+	return renderIsRunning
+}
+
 func (l *Lightsaber) Render(configuration config.Configuration, serialPort *serial.Port) {
 	renderIsrunningMutex.Lock()
 	start := !renderIsRunning
