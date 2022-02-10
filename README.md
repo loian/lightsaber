@@ -14,12 +14,8 @@ Build the server
 copy the binary to the user Application folder
 `cp lightsaber ~/Applications/`
 
-to run automatically when the user logs in
-create a folder for the log files:
-`mkdir ~/Library/Application\ Support/loian.lightsaber`
-
 copy the plist to the launch agent directory
-`cp loian.libhtsaber.plist ~/Library/LaunchAgents/`
+`cp loian.lightsaber.plist ~/Library/LaunchAgents/`
 
 register the daemon
 `launchctl load ~/Library/LaunchAgents/loian.lightsaber.plist`
