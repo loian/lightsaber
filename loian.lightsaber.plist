@@ -8,7 +8,7 @@
     <array>
         <string>/bin/zsh</string>
         <string>-c</string>
-        <string>$HOME/Applications/lightsaber 8877 >$HOME/Library/Application\ Support/loian.lightsaber/launchd.stout.log 2\>$HOME/Library/Application\ Support/loian.lightsaber/launchd.sterr.log</string>
+        <string>$HOME/Applications/lightsaber 8877 >$HOME/Library/Logs/loian.lightsaber-launchd.stout.log 2\>$HOME/Library/Logs/loian.lightsaber-launchd.sterr.log</string>
         <string>8878</string>
     </array>
     <key>KeepAlive</key>
