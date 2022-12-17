@@ -49,9 +49,9 @@ func Start(c *gin.Context) {
 		return
 	}
 
-	configuration := &serial.Config{Name: conf.Serial.Port, Baud: conf.Serial.Baud}
+	configuration := &serial.Config{Name: config.DiscoveredPort, Baud: conf.Serial.Baud}
 	serialPort, err := serial.OpenPort(configuration)
-	logrus.Info("Connecting to the serial port ", conf.Serial.Port)
+	logrus.Info("Connecting to the serial port ", config.DiscoveredPort)
 
 	if err != nil {
 		logrus.Error("Unable to connect to the serial port: ", err)

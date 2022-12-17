@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/creack/goselect v0.1.2 // indirect
 	github.com/gen2brain/shm v0.0.0-20200228170931-49f9650110c5 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
@@ -25,6 +26,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
+	go.bug.st/serial.v1 v0.0.0-20191202182710-24a6610f0541 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/sys v0.0.0-20201018230417-eeed37f84f13 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect

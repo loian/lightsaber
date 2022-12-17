@@ -1,7 +1,9 @@
 package config
 
+var DiscoveredPort = "";
+
 type Serial struct {
-	Port string `json:"port" binding:"required"`
+	//Port string `json:"port" binding:"required"`
 	Baud int    `json:"baud" binding:"required,oneof=9600 19200 38400 57600 115200"`
 }
 

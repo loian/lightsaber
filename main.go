@@ -1,11 +1,16 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/tarm/serial"
+	"go.bug.st/serial.v1/enumerator"
+	"lightsaber/config"
 	"lightsaber/handler"
+	"log"
 	"os"
 )
 
@@ -15,7 +20,49 @@ func usage() {
 	os.Exit(2)
 }
 
+func discoverPort() (string, error) {
+	ports, err := enumerator.GetDetailedPortsList()
+	if err != nil {
+		log.Fatal(err)
+	}
+	if len(ports) == 0 {
+		log.Fatal("no serial ports found")
+	}
+
+	for _, port := range ports {
+
+		c := &serial.Config{Name: port.Name, Baud: 115200}
+		s, err := serial.OpenPort(c)
+
+		if err == nil {
+			buf := make([]byte, 128)
+
+			n, _ := s.Read(buf)
+			if err != nil {
+				log.Fatal(err)
+			}
+			msg := string(buf[:n])
+			fmt.Println(msg)
+			if (msg[0:3] == "Ada") {
+				fmt.Println(port.Name)
+				s.Close()
+				return port.Name, nil
+			}
+			s.Close()
+		}
+
+	}
+	return "", errors.New ("no adalight found")
+}
+
 func main() {
+
+	adalightPort, errDiscover := discoverPort()
+	if errDiscover != nil {
+		log.Fatal (errDiscover)
+	}
+	config.DiscoveredPort = adalightPort
+
 	flag.Usage = usage
 	flag.Parse()
 
