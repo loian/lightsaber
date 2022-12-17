@@ -45,7 +45,6 @@ func discoverPort() (string, error) {
 				msg := string(buf[:n])
 				fmt.Println(msg)
 				if (msg[0:3] == "Ada") {
-					fmt.Println(port.Name)
 					s.Close()
 					return port.Name, nil
 				}
