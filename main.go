@@ -43,7 +43,6 @@ func discoverPort() (string, error) {
 
 			if n>=3 {
 				msg := string(buf[:n])
-				fmt.Println(msg)
 				if (msg[0:3] == "Ada") {
 					s.Close()
 					return port.Name, nil
