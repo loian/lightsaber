@@ -33,7 +33,6 @@ func discoverPort() (string, error) {
 	for _, port := range ports {
 		c := &serial.Config{Name: port.Name, Baud: 115200, ReadTimeout: time.Second * 1}
 		s, err := serial.OpenPort(c)
-		fmt.Println(err)
 		if err == nil {
 			buf := make([]byte, 128)
 			n, _ := s.Read(buf)
@@ -43,7 +42,7 @@ func discoverPort() (string, error) {
 
 			if n>=3 {
 				msg := string(buf[:n])
-				if (msg[0:3] == "Ada") {
+				if msg[0:3] == "Ada" {
 					s.Close()
 					return port.Name, nil
 				}
