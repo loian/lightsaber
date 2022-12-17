@@ -31,7 +31,6 @@ func discoverPort() (string, error) {
 	}
 
 	for _, port := range ports {
-		fmt.Println(port.Name)
 		c := &serial.Config{Name: port.Name, Baud: 115200, ReadTimeout: time.Second * 1}
 		s, err := serial.OpenPort(c)
 		fmt.Println(err)
