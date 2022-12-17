@@ -35,7 +35,6 @@ Example of a start request body:
   "display_index": 0,
   "selected_mode": "backlight",
   "serial": {
-    "port": "/dev/tty.usbserial-110",
     "baud": 115200
   },
   "color_adjustment": {
