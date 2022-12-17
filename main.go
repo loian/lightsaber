@@ -12,6 +12,7 @@ import (
 	"lightsaber/handler"
 	"log"
 	"os"
+	"time"
 )
 
 func usage() {
@@ -30,23 +31,25 @@ func discoverPort() (string, error) {
 	}
 
 	for _, port := range ports {
-
-		c := &serial.Config{Name: port.Name, Baud: 115200}
+		fmt.Println(port.Name)
+		c := &serial.Config{Name: port.Name, Baud: 115200, ReadTimeout: time.Second * 1}
 		s, err := serial.OpenPort(c)
-
+		fmt.Println(err)
 		if err == nil {
 			buf := make([]byte, 128)
-
 			n, _ := s.Read(buf)
 			if err != nil {
 				log.Fatal(err)
 			}
-			msg := string(buf[:n])
-			fmt.Println(msg)
-			if (msg[0:3] == "Ada") {
-				fmt.Println(port.Name)
-				s.Close()
-				return port.Name, nil
+
+			if n>=3 {
+				msg := string(buf[:n])
+				fmt.Println(msg)
+				if (msg[0:3] == "Ada") {
+					fmt.Println(port.Name)
+					s.Close()
+					return port.Name, nil
+				}
 			}
 			s.Close()
 		}
